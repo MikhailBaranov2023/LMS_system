@@ -1,14 +1,16 @@
 from django.shortcuts import render
 from rest_framework import viewsets, generics
-from materials.models import Course, Lesson
-from materials.serializers import CourseSerializers, LessonSerializers
+from materials.models import Course, Lesson, Subscription
+from materials.serializers import CourseSerializers, LessonSerializers, SubscriptionSerializers
 from materials.permissions import IsOwner, IsStaff
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from materials.paginators import MaterialsPaginator
 
 
 class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializers
     queryset = Course.objects.all()
+    pagination_class = MaterialsPaginator
 
     def get_permissions(self):
         """Права доступа"""
@@ -32,11 +34,13 @@ class LessonListAPIView(generics.ListAPIView):
     serializer_class = LessonSerializers
     queryset = Lesson.objects.all()
     permission_classes = [IsAuthenticated | IsOwner | IsStaff]
+    pagination_class = MaterialsPaginator
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
     serializer_class = LessonSerializers
-    permission_classes = [ IsOwner | IsStaff]
+    # permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated | IsStaff]
 
     def perform_create(self, serializer):
         new_lesson = serializer.save()
@@ -60,3 +64,24 @@ class LessonDeleteAPIView(generics.DestroyAPIView):
     serializer_class = LessonSerializers
     queryset = Lesson.objects.all()
     permission_classes = [IsOwner | IsStaff]
+
+
+class SubscriptionCreateAPIView(generics.CreateAPIView):
+    serializer_class = SubscriptionSerializers
+
+    def perform_create(self, serializer):
+        new_sub = serializer.save()
+        new_sub.user = self.request.user
+        new_sub.save()
+
+
+class SubscriptionListAPIView(generics.ListAPIView):
+    serializer_class = SubscriptionSerializers
+    queryset = Subscription.objects.all()
+    permission_classes = [IsOwner, IsStaff]
+
+
+class SubscriptionDeleteAPIView(generics.DestroyAPIView):
+    serializer_class = SubscriptionSerializers
+    queryset = Subscription.objects.all()
+    permission_classes = [IsOwner, IsStaff]

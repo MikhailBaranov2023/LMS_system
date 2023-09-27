@@ -24,7 +24,7 @@ class Lesson(models.Model):
     preview = models.ImageField(verbose_name='превью', **NULLABLE)
     video_link = models.URLField(max_length=150, verbose_name="Ссылка на видео", **NULLABLE)
 
-    course = models.ForeignKey(Course, verbose_name='курс', on_delete=models.CASCADE, related_name='lesson')
+    course = models.ForeignKey(Course, verbose_name='курс', on_delete=models.CASCADE, related_name='lesson', **NULLABLE)
 
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='владелец', **NULLABLE)
 
@@ -34,3 +34,16 @@ class Lesson(models.Model):
     class Meta:
         verbose_name = 'Урок'
         verbose_name_plural = 'Урок'
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='пользователь',
+                             **NULLABLE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='курс')
+
+    def __str__(self):
+        return f"{self.user} подписался на {self.course}"
+
+    class Meta:
+        verbose_name = 'Подписка'
+        verbose_name_plural = 'Подписки'

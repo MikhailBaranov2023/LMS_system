@@ -26,7 +26,7 @@ class Payment(models.Model):
 
     payment_id = models.TextField(verbose_name="payment_id", **NULLABLE)
 
-    payment_link = models.CharField(max_length=150, verbose_name='ссылка на оплату', **NULLABLE)
+    payment_link = models.CharField(verbose_name='ссылка на оплату', **NULLABLE)
 
     def __str__(self):
         return f'оплата: {self.paid_course if self.paid_course else self.paid_lesson} - {self.payment_amount}'

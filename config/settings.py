@@ -152,3 +152,9 @@ CSRF_TRUSTED_ORIGINS = [
 CORS_ALLOW_ALL_ORIGINS = False
 
 STRIPE_API_KEY = "sk_test_51NvSQBG1tycGbCbRdjRZc9mldsBVskffmETDlUa35Mva9xGnXezRbIu2A92Sr7OHO5vmK33k78X3jQLbEDH4fJ6400kP9yNGr3"
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'problemaprod@gmail.com'
+EMAIL_HOST_PASSWORD = 'djonegbvbzdkcltb'

@@ -19,6 +19,7 @@ class PaymentListAPIView(generics.ListAPIView):
 class PaymentCreateAPIView(generics.CreateAPIView):
     """Создание платежа"""
     serializer_class = PaymentSerializer
+    queryset = Payment.objects.all()
 
     def perform_create(self, serializer):
         """Сохраняет пользователя и курс"""

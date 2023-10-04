@@ -11,9 +11,13 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
+import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / '.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -38,10 +42,12 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'django_filters',
-    'rest_framework_simplejwt',
-    'drf_yasg',
 
+    'rest_framework_simplejwt',
+    'django_celery_beat',
+    'drf_yasg',
     'corsheaders',
+
     'materials',
     'users',
     'payment',
@@ -84,9 +90,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'LMS_system',
+        'NAME': os.getenv('DATABASE_NAME'),
         'USER': 'postgres',
-        'PASSWORD': 'problema99'
+        'PASSWORD': os.getenv('DATABASE_PASSWORD')
     }
 }
 
@@ -111,7 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-ru'
 
 TIME_ZONE = 'UTC'
 
@@ -149,12 +155,20 @@ CSRF_TRUSTED_ORIGINS = [
     "https://read-and-write.example.com",
 ]
 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=20),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1)
+}
+
 CORS_ALLOW_ALL_ORIGINS = False
 
-STRIPE_API_KEY = "sk_test_51NvSQBG1tycGbCbRdjRZc9mldsBVskffmETDlUa35Mva9xGnXezRbIu2A92Sr7OHO5vmK33k78X3jQLbEDH4fJ6400kP9yNGr3"
+STRIPE_API_KEY = os.getenv('STRIPE_API_KEY')
 
-EMAIL_HOST = 'smtp.yandex.ru'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'problemaprod@gmail.com'
-EMAIL_HOST_PASSWORD = 'djonegbvbzdkcltb'
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'

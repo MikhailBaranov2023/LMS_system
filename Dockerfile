@@ -4,6 +4,6 @@ WORKDIR /LMS_system
 
 COPY ./reqirements.txt /LMS_system/
 
-RUN pip install -r requirements.txt
+RUN pip install -r reqirements.txt
 
 COPY . .

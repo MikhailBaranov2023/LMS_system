@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework_simplejwt',
     'drf_yasg',
+    'django_celery_beat',
 
     'corsheaders',
     'materials',
@@ -151,6 +152,10 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = False
+
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+
 
 STRIPE_API_KEY = "sk_test_51NvSQBG1tycGbCbRdjRZc9mldsBVskffmETDlUa35Mva9xGnXezRbIu2A92Sr7OHO5vmK33k78X3jQLbEDH4fJ6400kP9yNGr3"
 
